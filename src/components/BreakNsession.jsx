@@ -3,23 +3,26 @@ import {Container,Paper,Typography,Stack,IconButton,Button,Box} from "@mui/mater
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLength}) => {
-    const increment = () => {
-    setSessionLength(sessionLength + 1);
-    setTotalSec((prev) => {
-      return prev + 60;
-    });
-  };
+const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLength,setTotalSec,pause}) => {
+    
+    const incrementSession = () => {
+        if(pause){
+            setSessionLength(sessionLength + 1);
+            setTotalSec((sessionLength+1) * 60);
+        }
+    };
 
-  const decrement = () => {
-    setSessionLength(sessionLength - 1);
+    const decrementSession = () => {
+        if(pause){
+            if(sessionLength.valueOf()>1){
+                setSessionLength(sessionLength - 1);
+                setTotalSec((sessionLength-1) * 60 );
+            }
 
-    setTotalSec((prev) => {
-      return prev - 60;
-    });
-  };
+        }
+    };
 
-  return (
+  return(
 
      <>
         <Box sx={{ mb: 3 }}>
@@ -33,10 +36,7 @@ const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLengt
             <IconButton color="primary">
               <RemoveIcon
                 onClick={() => {
-                  setBreakLength((prev)=>{
-                    return prev - 1 ; 
-                  }
-                 );
+                  setBreakLength(breakLength - 1);
                 }}
               />
             </IconButton>
@@ -61,11 +61,11 @@ const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLengt
             alignItems="center"
           >
             <IconButton color="primary">
-              <RemoveIcon onClick={decrement} />
+              <RemoveIcon onClick={decrementSession} />
             </IconButton>
             <Typography variant="h5">{sessionLength}</Typography>
             <IconButton color="primary">
-              <AddIcon onClick={increment} />
+              <AddIcon onClick={incrementSession} />
             </IconButton>
           </Stack>
         </Box>
