@@ -171,6 +171,7 @@ function App() {
             }}
           >
             <BreakNsession
+              isSession={isSession}
               setTotalSec={setTotalSec}
               pause={pause}
               setBreakLength={setBreakLength}

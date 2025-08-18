@@ -3,12 +3,15 @@ import {Container,Paper,Typography,Stack,IconButton,Button,Box} from "@mui/mater
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLength,setTotalSec,pause}) => {
+const BreakNsession = ({breakLength,isSession,sessionLength,setBreakLength,setSessionLength,setTotalSec,pause}) => {
     
     const incrementSession = () => {
-        if(pause){
+        if(pause){           
             setSessionLength(sessionLength + 1);
-            setTotalSec((sessionLength+1) * 60);
+            if(isSession){
+                 console.log('incrementSession');    
+                setTotalSec((sessionLength+1) * 60);
+            }
         }
     };
 
@@ -16,11 +19,35 @@ const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLengt
         if(pause){
             if(sessionLength.valueOf()>1){
                 setSessionLength(sessionLength - 1);
-                setTotalSec((sessionLength-1) * 60 );
+                if(isSession){
+                    console.log('decrementSession');    
+                    setTotalSec((sessionLength-1) * 60 );
+                }
             }
-
         }
     };
+
+    const increaseBreakChange = () => {
+        if (pause) {
+            setBreakLength(breakLength+1);
+            if(!isSession){
+                 console.log('increaseBreakChange');    
+                setTotalSec((breakLength+1)*60)
+            }
+        }
+    } 
+
+    const decreaseBreakChange = () => {
+        if (pause) {
+            if(breakLength.valueOf()>1){
+                setBreakLength(breakLength-1);
+                if(!isSession){
+                    console.log('decreadeBreakChange');                   
+                    setTotalSec((breakLength-1)*60)
+                }
+            }
+        }
+    } 
 
   return(
 
@@ -35,17 +62,13 @@ const BreakNsession = ({breakLength,sessionLength,setBreakLength,setSessionLengt
           >
             <IconButton color="primary">
               <RemoveIcon
-                onClick={() => {
-                  setBreakLength(breakLength - 1);
-                }}
+                onClick={decreaseBreakChange}
               />
             </IconButton>
             <Typography variant="h5">{breakLength}</Typography>
             <IconButton color="primary">
               <AddIcon
-                onClick={() => {
-                  setBreakLength(breakLength + 1);
-                }}
+                onClick={increaseBreakChange}
               />
             </IconButton>
           </Stack>
